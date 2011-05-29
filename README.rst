@@ -88,3 +88,6 @@ Changelog
 Please see http://www.vim.org/scripts/script.php?script_id=2441 for a history of
 all changes.
 
+Personal changes:
+
+ * Update less frequently to make vim more responsive

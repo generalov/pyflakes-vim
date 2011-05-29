@@ -133,18 +133,17 @@ if !b:did_python_init
     finish
 endif
 
-au BufLeave <buffer> call s:ClearPyflakes()
-
-au BufEnter <buffer> call s:RunPyflakes()
+" Disabled updates to have faster response
+" Now this can be done on demand by pressing <F7> in normal mode
+" au BufLeave <buffer> call s:ClearPyflakes()
+" au BufEnter <buffer> call s:RunPyflakes()
+" au InsertEnter <buffer> call s:RunPyflakes()
+" au CursorHold <buffer> call s:RunPyflakes()
+" au CursorHoldI <buffer> call s:RunPyflakes()
+" au CursorMoved <buffer> call s:GetPyflakesMessage()
 au InsertLeave <buffer> call s:RunPyflakes()
-au InsertEnter <buffer> call s:RunPyflakes()
 au BufWritePost <buffer> call s:RunPyflakes()
-
-au CursorHold <buffer> call s:RunPyflakes()
-au CursorHoldI <buffer> call s:RunPyflakes()
-
 au CursorHold <buffer> call s:GetPyflakesMessage()
-au CursorMoved <buffer> call s:GetPyflakesMessage()
 
 if !exists("*s:PyflakesUpdate")
     function s:PyflakesUpdate()
@@ -161,10 +160,11 @@ endif
 " Hook common text manipulation commands to update PyFlakes
 "   TODO: is there a more general "text op" autocommand we could register
 "   for here?
-noremap <buffer><silent> dd dd:PyflakesUpdate<CR>
-noremap <buffer><silent> dw dw:PyflakesUpdate<CR>
 noremap <buffer><silent> u u:PyflakesUpdate<CR>
-noremap <buffer><silent> <C-R> <C-R>:PyflakesUpdate<CR>
+noremap <buffer><silent> <F7> :PyflakesUpdate<CR>
+" noremap <buffer><silent> dd dd:PyflakesUpdate<CR>
+" noremap <buffer><silent> dw dw:PyflakesUpdate<CR>
+" noremap <buffer><silent> <C-R> <C-R>:PyflakesUpdate<CR>
 
 " WideMsg() prints [long] message up to (&columns-1) length
 " guaranteed without "Press Enter" prompt.

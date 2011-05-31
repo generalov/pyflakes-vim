@@ -47,7 +47,10 @@ scriptdir = os.path.join(os.path.dirname(vim.eval('expand("<sfile>")')), 'pyflak
 if scriptdir not in sys.path:
     sys.path.insert(0, scriptdir)
 
-import ast
+try:
+    import ast
+except ImportError:
+    import _ast as ast
 from pyflakes import checker, messages
 from operator import attrgetter
 import re
@@ -68,7 +71,7 @@ class blackhole(object):
 
 def check(buffer):
     filename = buffer.name
-    contents = buffer[:]
+    contents = list(buffer)[:]
 
     # shebang usually found at the top of the file, followed by source code encoding marker.
     # assume everything else that follows is encoded in the encoding.
@@ -96,7 +99,7 @@ def check(buffer):
         # TODO: use warnings filters instead of ignoring stderr
         old_stderr, sys.stderr = sys.stderr, blackhole()
         try:
-            tree = ast.parse(contents, filename or '<unknown>')
+            tree = compile(contents, filename or '<unknown>', 'exec', ast.PyCF_ONLY_AST)
         finally:
             sys.stderr = old_stderr
     except:
